@@ -1,0 +1,1 @@
+This script will output whether all policies for both roles match or if there are any differences between the policies for each role.
