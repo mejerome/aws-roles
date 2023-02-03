@@ -32,3 +32,17 @@ for policy_arn in "${!role_policy_docs1[@]}"; do
         fi
     fi
 done
+
+# Compare the managed policy permissions for each role
+for policy_arn in "${!role_policy_docs1[@]}"; do
+    if [ -z "${role_policy_docs2[$policy_arn]}" ]; then
+        echo "Managed policy $policy_arn is missing in role $role_name2"
+    else
+        policy_doc1=$(echo "${role_policy_docs1[$policy_arn]}" | jq '.Policy.Statement')
+        policy_doc2=$(echo "${role_policy_docs2[$policy_arn]}" | jq '.Policy.Statement')
+
+        if [ "$policy_doc1" != "$policy_doc2" ]; then
+            echo "Permissions in managed policy $policy_arn differ between roles $role_name1 and $role_name2"
+        fi
+    fi
+done
